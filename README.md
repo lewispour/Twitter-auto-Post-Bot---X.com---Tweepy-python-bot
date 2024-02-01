@@ -7,7 +7,7 @@
 [![Schedule](https://img.shields.io/badge/schedule-v1.2.1-blue)](https://schedule.readthedocs.io/en/stable/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Automate your Twitter presence. Auto Post from from file, from a string, schedule or post the tweet instantly.
+Automate your Twitter presence. Auto Post from from file, from a string, schedule a new tweet to be posted daily or post the tweet instantly.
 </div>
 
 ---
