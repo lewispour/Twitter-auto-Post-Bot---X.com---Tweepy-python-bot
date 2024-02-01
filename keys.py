@@ -1,0 +1,5 @@
+bearer_token = "GET_KEY_FROM_developer.twitter.com/apps"
+api_key = "GET_KEY_FROM_developer.twitter.com/apps"
+api_secret = "GET_KEY_FROM_developer.twitter.com/apps"
+access_token = "GET_KEY_FROM_developer.twitter.com/apps"
+access_token_secret = "GET_KEY_FROM_developer.twitter.com/apps"
