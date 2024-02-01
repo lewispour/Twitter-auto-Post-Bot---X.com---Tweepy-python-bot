@@ -26,6 +26,7 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 
 ### 📁 Upcoming Features
 - `Adding Feature to Auto fetch from openAI api and tweet based on a prompt`.
+- `Adding CLI`.
 
 ## 🚀 Getting Started
 
