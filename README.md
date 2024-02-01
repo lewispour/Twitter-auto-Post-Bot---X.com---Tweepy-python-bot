@@ -18,7 +18,7 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 
 ### 📁 Files Overview
 
-- `schedule-daily-post-from-file.py`: Automates daily tweets, randomly selecting from `tweets.txt`.
+- `schedule-daily-post-from-file.py`: Automates daily tweets, randomly selecting from `tweets.txt`. To change the schedule time [edit this](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/schedule-daily-post-from-file.py#L34).
 - `tweeter-from-code.py`: Immediately tweets a pre-defined message with the current date.
 - `tweeter-random-from-file.py`: Instantly posts a random tweet from `tweets.txt`.
 - `tweets.txt`: Add your tweets here, one per line. They will be randomly selected and tweeted.
