@@ -3,8 +3,8 @@
 # 🐦 Twitter Auto-Post Bot 🤖
 
 [![Python](https://img.shields.io/badge/python-v3.7+-blue.svg)](https://www.python.org/downloads/release/python-370/)
-[![Tweepy](https://img.shields.io/badge/tweepy-v4.10-blue)](http://docs.tweepy.org/en/latest/)
-[![Schedule](https://img.shields.io/badge/schedule-v1.1.0-blue)](https://schedule.readthedocs.io/en/stable/)
+[![Tweepy](https://img.shields.io/badge/tweepy-v4.14-blue)](http://docs.tweepy.org/en/latest/)
+[![Schedule](https://img.shields.io/badge/schedule-v1.2.1-blue)](https://schedule.readthedocs.io/en/stable/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Automate your Twitter presence with elegance and ease. Crafted for social media enthusiasts, digital marketers, and developers.
