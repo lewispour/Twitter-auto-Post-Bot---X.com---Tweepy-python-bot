@@ -18,10 +18,10 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 
 ### 📁 Files Overview
 
-- `schedule-daily-post-from-file.py`: Automates daily tweets, randomly selecting from `tweets.txt`. To change the schedule time [edit this](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/schedule-daily-post-from-file.py#L34).
-- `tweeter-from-code.py`: Immediately tweets a pre-defined message with the current date.
-- `tweeter-random-from-file.py`: Instantly posts a random tweet from `tweets.txt`.
-- `tweets.txt`: Add your tweets here, one per line. They will be randomly selected and tweeted.
+- `src/schedule-daily-post-from-file.py`: Automates daily tweets, randomly selecting from `tweets.txt`. To change the schedule time [edit this](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/schedule-daily-post-from-file.py#L22).
+- `src/tweeter-from-code.py`: Immediately tweets a pre-defined message with the current date, but you can change this to whatever you like.
+- `src/tweeter-random-from-file.py`: Instantly posts a random tweet from `tweets.txt`.
+- `data/tweets.txt`: Add your tweets here, one per line. They will be randomly selected and tweeted.
 - `requirements.txt`: Lists all necessary Python packages.
 
 ### 📁 Upcoming Features
@@ -49,7 +49,7 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 ### Setup
 
 1. Obtain Twitter API credentials [here](https://developer.twitter.com/apps).
-2. update `keys.py` file with your credentials:
+2. update `config/keys.py` file with your credentials:
     ```python
     bearer_token = "your_bearer_token"
     api_key = "your_api_key"
