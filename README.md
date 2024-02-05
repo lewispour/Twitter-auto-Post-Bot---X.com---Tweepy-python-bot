@@ -75,7 +75,7 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
    access_token_secret = "GET_KEY_FROM_developer.twitter.com/apps"
    openai_key = "GET_YOUR_OPENAI_API_KEY_FROM_https://platform.openai.com/api-keys"
     ```
-3. Customize `data/tweets.txt` with your tweets.
+3. Customize `data/tweets.txt` with your tweets. (SKIP: If not using tweet from file)
 
 ## 🔧 Usage
 
