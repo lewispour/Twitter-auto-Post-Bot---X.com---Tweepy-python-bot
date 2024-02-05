@@ -57,7 +57,7 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
     access_token = "your_access_token"
     access_token_secret = "your_access_token_secret"
     ```
-3. Customize `tweets.txt` with your tweets.
+3. Customize `data/tweets.txt` with your tweets.
 
 ## 🔧 Usage
 
