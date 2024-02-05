@@ -4,6 +4,8 @@
 
 [![Python](https://img.shields.io/badge/python-v3.7+-blue.svg)](https://www.python.org/downloads/release/python-370/)
 [![Tweepy](https://img.shields.io/badge/tweepy-v4.14-blue)](http://docs.tweepy.org/en/latest/)
+[![OpenAI](https://img.shields.io/badge/openai-v1.11.1-blue.svg)](https://platform.openai.com/docs/libraries)
+
 [![Schedule](https://img.shields.io/badge/schedule-v1.2.1-blue)](https://schedule.readthedocs.io/en/stable/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
