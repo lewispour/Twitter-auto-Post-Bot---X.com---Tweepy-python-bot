@@ -100,4 +100,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Project Link: [https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot)
 
 ## ✉️ Status
-- Last tested and still working on 24/12/2024 ✅
+- Last tested and still working on 05/11/2025 ✅
