@@ -111,7 +111,7 @@ After installing dependencies with `pip install -r requirements.txt`, start the 
 python web.py
 ```
 
-The web interface will be available at: **http://localhost:5000**
+The web interface will be available at: **http://localhost:8080**
 
 Your browser should automatically open, or you can manually navigate to the URL.
 
