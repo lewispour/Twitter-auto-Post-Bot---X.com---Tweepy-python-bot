@@ -9,7 +9,7 @@
 [![Schedule](https://img.shields.io/badge/schedule-v1.2.1-blue)](https://schedule.readthedocs.io/en/stable/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Automate your Twitter presence. Auto Post tweets from from openAI GPT4, from a file, from a string, schedule a new tweet to be posted daily or post the tweet instantly.
+Automate your Twitter presence. Auto Post tweets from from openAI GPT-5-nano, from a file, from a string, schedule a new tweet to be posted daily or post the tweet instantly.
 </div>
 
 ---
@@ -21,12 +21,12 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 ### 📁 Files Overview
 #### Using OpenAI
 ##### Instantly:
-- `src/instantly-tweet-from-openai.py`: Immediately tweets a tweet from openAI api response, currently using GPT4, but you can change the model in [functions.py](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/functions.py#L21)
+- `src/instantly-tweet-from-openai.py`: Immediately tweets a tweet from openAI api response, currently using GPT-5-nano, but you can change the model in [functions.py](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/functions.py#L21)
 
 - ###### Prompt defined [here](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/instantly-tweet-from-openai.py#L7) 
 
 ##### Schedule to auto post, tweet daily at a time:
-- `src/schedule-daily-post-from-openai.py`: Automates daily tweets, Runs daily at a scheduled time and queries open ai api to create a tweet, the tweet returned is then automatically tweeted each day to fully automate twitter on auto pilot. By default the model is OPENAI GPT4 but you can change the model in [functions.py](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/functions.py#L21).
+- `src/schedule-daily-post-from-openai.py`: Automates daily tweets, Runs daily at a scheduled time and queries open ai api to create a tweet, the tweet returned is then automatically tweeted each day to fully automate twitter on auto pilot. By default the model is OPENAI GPT-5-nano but you can change the model in [functions.py](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/functions.py#L21).
 - ###### Prompt defined [here](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/schedule-daily-post-from-openai.py#L12) 
 - ###### Schedule time defined [here](https://github.com/lewispour/Twitter-auto-Post-Bot---X.com---Tweepy-python-bot/blob/main/src/schedule-daily-post-from-openai.py#L20)
 
@@ -124,7 +124,7 @@ Your browser should automatically open, or you can manually navigate to the URL.
 - Monitor scheduled jobs
 
 #### Post Tweet
-- **AI-Generated Tweets**: Generate tweets using OpenAI's GPT-4 with custom prompts
+- **AI-Generated Tweets**: Generate tweets using OpenAI's GPT-5-nano with custom prompts
 - **Random from File**: Post a random tweet from your tweets.txt library
 - **Custom Tweet**: Write and post your own tweet with character counter
 
