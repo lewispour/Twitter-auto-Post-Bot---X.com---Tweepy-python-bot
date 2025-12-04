@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Twitter Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </h1>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Status Card -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Bot Status
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Scheduler:</strong>
+                    {% if scheduler_running %}
+                        <span class="status-badge status-running">
+                            <i class="bi bi-check-circle"></i> Running
+                        </span>
+                    {% else %}
+                        <span class="status-badge status-stopped">
+                            <i class="bi bi-x-circle"></i> Stopped
+                        </span>
+                    {% endif %}
+                </div>
+
+                {% if scheduled_jobs %}
+                <div class="mt-3">
+                    <strong>Active Jobs:</strong>
+                    <ul class="list-unstyled mt-2">
+                        {% for job in scheduled_jobs %}
+                        <li class="mb-2">
+                            <i class="bi bi-clock"></i> {{ job.time }} - {{ job.type }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Credentials Test Card -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-shield-check"></i> Test Credentials
+            </div>
+            <div class="card-body">
+                <p>Verify your Twitter API credentials are working correctly.</p>
+                <button class="btn btn-primary w-100" onclick="testCredentials()">
+                    <i class="bi bi-check-circle"></i> Test Now
+                </button>
+                <div id="credentialsResult" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="col-md-12 col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-lightning"></i> Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/post" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Post a Tweet
+                    </a>
+                    <a href="/manage-tweets" class="btn btn-outline-primary">
+                        <i class="bi bi-list-ul"></i> Manage Tweets
+                    </a>
+                    <a href="/schedule" class="btn btn-outline-primary">
+                        <i class="bi bi-calendar-check"></i> Schedule Posts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Overview -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-star"></i> Features
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="bi bi-robot"></i> AI-Powered Tweets</h5>
+                        <p class="text-muted">Generate tweets using OpenAI's GPT-4 with custom prompts.</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="bi bi-file-text"></i> Tweet Library</h5>
+                        <p class="text-muted">Manage a library of pre-written tweets and post them randomly.</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5><i class="bi bi-calendar-event"></i> Scheduling</h5>
+                        <p class="text-muted">Schedule daily tweets to run automatically at specific times.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function testCredentials() {
+        const resultDiv = document.getElementById('credentialsResult');
+        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Testing...';
+
+        try {
+            const response = await fetch('/test-credentials', {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success mb-0">
+                        <strong>Success!</strong><br>
+                        <small>
+                            <i class="bi bi-person"></i> @${data.data.username}<br>
+                            <i class="bi bi-people"></i> ${data.data.followers} followers<br>
+                            <i class="bi bi-person-check"></i> ${data.data.following} following
+                        </small>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger mb-0">
+                        <strong>Error!</strong><br>
+                        <small>${data.error}</small>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    <strong>Error!</strong><br>
+                    <small>${error.message}</small>
+                </div>
+            `;
+        }
+    }
+
+    // Auto-refresh scheduler status every 10 seconds
+    setInterval(async () => {
+        try {
+            const response = await fetch('/scheduler-status');
+            const data = await response.json();
+            // Update UI if needed
+            // This could be enhanced to update the status badge dynamically
+        } catch (error) {
+            console.error('Error fetching scheduler status:', error);
+        }
+    }, 10000);
+</script>
+{% endblock %}

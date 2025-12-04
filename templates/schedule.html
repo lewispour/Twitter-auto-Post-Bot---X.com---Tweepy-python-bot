@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+{% block title %}Schedule Tweets - Twitter Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="bi bi-calendar-check"></i> Schedule Tweets
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Current Status -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-activity"></i> Scheduler Status
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Status:</strong>
+                        <span id="schedulerStatus">
+                            {% if scheduler_running %}
+                                <span class="status-badge status-running">
+                                    <i class="bi bi-check-circle"></i> Running
+                                </span>
+                            {% else %}
+                                <span class="status-badge status-stopped">
+                                    <i class="bi bi-x-circle"></i> Stopped
+                                </span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div>
+                        {% if scheduler_running %}
+                            <button class="btn btn-danger" onclick="stopScheduler()">
+                                <i class="bi bi-stop-circle"></i> Stop Scheduler
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if scheduled_jobs %}
+                <div class="mt-3">
+                    <strong>Active Jobs:</strong>
+                    <div id="activeJobs">
+                        {% for job in scheduled_jobs %}
+                        <div class="alert alert-info mt-2 mb-0">
+                            <i class="bi bi-clock"></i> <strong>{{ job.time }}</strong> - {{ job.type }}
+                            {% if job.prompt != 'N/A' %}
+                            <br><small>Prompt: {{ job.prompt }}</small>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Schedule AI Tweets -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-robot"></i> Schedule AI-Generated Tweets
+            </div>
+            <div class="card-body">
+                <p>Automatically generate and post tweets daily using AI.</p>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="aiScheduleTime" class="form-label">Time (24-hour format)</label>
+                        <input type="time" class="form-control" id="aiScheduleTime" value="09:00">
+                        <div class="form-text">When to post daily (e.g., 09:00 for 9:00 AM)</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="aiSchedulePrompt" class="form-label">Prompt for AI</label>
+                    <textarea class="form-control" id="aiSchedulePrompt" rows="3" placeholder="Example: Create a tweet about technology trends">Create a short tweet about Motorbikes.</textarea>
+                    <div class="form-text">This prompt will be used to generate tweets daily.</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startAISchedule()">
+                    <i class="bi bi-calendar-plus"></i> Start AI Schedule
+                </button>
+
+                <div id="aiScheduleResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Schedule File Tweets -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-file-text"></i> Schedule Tweets from File
+            </div>
+            <div class="card-body">
+                <p>Automatically post random tweets from your library daily.</p>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="fileScheduleTime" class="form-label">Time (24-hour format)</label>
+                        <input type="time" class="form-control" id="fileScheduleTime" value="12:00">
+                        <div class="form-text">When to post daily (e.g., 12:00 for noon)</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startFileSchedule()">
+                    <i class="bi bi-calendar-plus"></i> Start File Schedule
+                </button>
+
+                <div id="fileScheduleResult" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Sidebar -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> How Scheduling Works
+            </div>
+            <div class="card-body">
+                <h6><i class="bi bi-gear"></i> Setup:</h6>
+                <ul class="small">
+                    <li>Choose between AI or File-based tweets</li>
+                    <li>Set the time when tweets should post</li>
+                    <li>Start the scheduler</li>
+                    <li>The bot will post automatically each day</li>
+                </ul>
+
+                <h6 class="mt-3"><i class="bi bi-exclamation-triangle"></i> Important:</h6>
+                <ul class="small">
+                    <li>Only one scheduler can run at a time</li>
+                    <li>The web server must remain running</li>
+                    <li>Times are in 24-hour format (HH:MM)</li>
+                    <li>Stop the scheduler to change settings</li>
+                </ul>
+
+                <h6 class="mt-3"><i class="bi bi-lightbulb"></i> Tips:</h6>
+                <ul class="small">
+                    <li>Test your setup with a near-future time first</li>
+                    <li>Schedule during peak engagement hours</li>
+                    <li>Monitor the scheduler status regularly</li>
+                    <li>Keep diverse content in your tweet library</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <i class="bi bi-clock-history"></i> Time Zone
+            </div>
+            <div class="card-body">
+                <p class="small mb-0">
+                    All times are based on your server's time zone.
+                    Current server time: <strong id="serverTime"></strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Update server time
+    function updateServerTime() {
+        const now = new Date();
+        document.getElementById('serverTime').textContent = now.toLocaleTimeString();
+    }
+    updateServerTime();
+    setInterval(updateServerTime, 1000);
+
+    async function startAISchedule() {
+        const time = document.getElementById('aiScheduleTime').value;
+        const prompt = document.getElementById('aiSchedulePrompt').value;
+        const resultDiv = document.getElementById('aiScheduleResult');
+
+        if (!time) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> Please select a time.
+                </div>
+            `;
+            return;
+        }
+
+        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Starting scheduler...';
+
+        try {
+            const response = await fetch('/start-schedule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'ai',
+                    time: time,
+                    prompt: prompt
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong><i class="bi bi-check-circle"></i> Success!</strong><br>
+                        ${data.message}
+                    </div>
+                `;
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                        ${data.error}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    async function startFileSchedule() {
+        const time = document.getElementById('fileScheduleTime').value;
+        const resultDiv = document.getElementById('fileScheduleResult');
+
+        if (!time) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> Please select a time.
+                </div>
+            `;
+            return;
+        }
+
+        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Starting scheduler...';
+
+        try {
+            const response = await fetch('/start-schedule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'file',
+                    time: time
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong><i class="bi bi-check-circle"></i> Success!</strong><br>
+                        ${data.message}
+                    </div>
+                `;
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                        ${data.error}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    async function stopScheduler() {
+        if (!confirm('Are you sure you want to stop the scheduler?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/stop-schedule', {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showToast('Scheduler stopped successfully!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast('Error: ' + data.error, 'danger');
+            }
+        } catch (error) {
+            showToast('Error: ' + error.message, 'danger');
+        }
+    }
+
+    // Auto-refresh scheduler status every 10 seconds
+    setInterval(async () => {
+        try {
+            const response = await fetch('/scheduler-status');
+            const data = await response.json();
+
+            // Update status badge
+            const statusSpan = document.querySelector('#schedulerStatus span');
+            if (data.running) {
+                statusSpan.className = 'status-badge status-running';
+                statusSpan.innerHTML = '<i class="bi bi-check-circle"></i> Running';
+            } else {
+                statusSpan.className = 'status-badge status-stopped';
+                statusSpan.innerHTML = '<i class="bi bi-x-circle"></i> Stopped';
+            }
+        } catch (error) {
+            console.error('Error fetching scheduler status:', error);
+        }
+    }, 10000);
+</script>
+{% endblock %}

@@ -44,8 +44,9 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 - `src/functions.py`: Shared functions for generating tweets from openai and tweet posting
 - `requirements.txt`: Lists all necessary Python packages.
 
-### 📁 Upcoming Features
-- `Adding CLI`.
+### ⭐ New: Command Line Interface (CLI)
+
+The bot now includes a powerful CLI for easy management! See the [CLI Usage](#-cli-usage) section below.
 
 ## 🚀 Getting Started
 
@@ -81,12 +82,152 @@ This Python-based Twitter Auto-Post Bot automates tweeting, Credit to the Tweepy
 
 ## 🔧 Usage
 
+### Option 1: Using the Web UI (Recommended)
+
+The easiest way to use the bot is through the browser-based web interface. See the [Web UI Usage](#-web-ui-usage) section below.
+
+### Option 2: Using the CLI
+
+For command-line enthusiasts, see the [CLI Usage](#-cli-usage) section below for terminal-based commands.
+
+### Option 3: Running Scripts Directly
+
 Run any script using Python:
 
 ```bash
 cd src/
 python instantly-tweet-from-openai.py
 ```
+
+## 🌐 Web UI Usage
+
+The Web UI provides the easiest way to manage your Twitter bot through your browser.
+
+### Starting the Web Interface
+
+After installing dependencies with `pip install -r requirements.txt`, start the web server:
+
+```bash
+python web.py
+```
+
+The web interface will be available at: **http://localhost:5000**
+
+Your browser should automatically open, or you can manually navigate to the URL.
+
+### Web UI Features
+
+#### Dashboard
+- View bot status and scheduler state
+- Test Twitter API credentials
+- Quick access to all features
+- Monitor scheduled jobs
+
+#### Post Tweet
+- **AI-Generated Tweets**: Generate tweets using OpenAI's GPT-4 with custom prompts
+- **Random from File**: Post a random tweet from your tweets.txt library
+- **Custom Tweet**: Write and post your own tweet with character counter
+
+#### Manage Tweets
+- View all tweets in your library
+- Add new tweets to the library
+- Edit existing tweets inline
+- Delete unwanted tweets
+- See library statistics
+
+#### Schedule
+- Schedule daily AI-generated tweets at specific times
+- Schedule daily posts from your tweet library
+- Monitor scheduler status in real-time
+- Start/stop the scheduler
+- View active scheduled jobs
+
+### Web UI Tips
+
+- The web server must remain running for scheduled tweets to work
+- All times are in 24-hour format (HH:MM)
+- Only one scheduler can run at a time
+- The interface auto-refreshes scheduler status every 10 seconds
+
+## 🎯 CLI Usage
+
+The CLI provides a simple and intuitive interface for all bot operations.
+
+### Installation
+
+After installing dependencies with `pip install -r requirements.txt`, you can run the CLI:
+
+```bash
+python cli.py --help
+```
+
+### Available Commands
+
+#### 1. Test Credentials
+
+Test your Twitter API credentials:
+
+```bash
+python cli.py test
+```
+
+#### 2. Post a Tweet Instantly
+
+**Post with AI (OpenAI):**
+```bash
+python cli.py post --ai
+```
+
+**Post with custom AI prompt:**
+```bash
+python cli.py post --ai --prompt "Create a tweet about Python programming"
+```
+
+**Post random tweet from file:**
+```bash
+python cli.py post --file
+```
+
+**Post custom text:**
+```bash
+python cli.py post --text "Hello Twitter! This is my custom tweet"
+```
+
+#### 3. Schedule Daily Tweets
+
+**Schedule AI-generated tweets:**
+```bash
+python cli.py schedule-posts --ai --time "09:00"
+```
+
+**Schedule with custom prompt:**
+```bash
+python cli.py schedule-posts --ai --time "14:30" --prompt "Create a tweet about technology"
+```
+
+**Schedule tweets from file:**
+```bash
+python cli.py schedule-posts --file --time "12:00"
+```
+
+#### 4. Manage Tweets File
+
+**List all tweets in file:**
+```bash
+python cli.py list-tweets
+```
+
+**Add a new tweet to file:**
+```bash
+python cli.py add-tweet
+```
+
+### CLI Tips
+
+- All times are in 24-hour format (HH:MM)
+- Press `Ctrl+C` to stop the scheduler
+- The `--help` flag works with any command for more details
+- Example: `python cli.py post --help`
 
 ## 🤝 Contributing
 

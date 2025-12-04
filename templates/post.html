@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Post Tweet - Twitter Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="bi bi-send"></i> Post a Tweet
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- AI Generated Tweet -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-robot"></i> AI-Generated Tweet
+            </div>
+            <div class="card-body">
+                <p>Generate a tweet using OpenAI's GPT-4 with a custom prompt.</p>
+
+                <div class="mb-3">
+                    <label for="aiPrompt" class="form-label">Prompt for AI</label>
+                    <textarea class="form-control" id="aiPrompt" rows="3" placeholder="Example: Create a tweet about the future of technology">Create a short tweet about Motorbikes.</textarea>
+                    <div class="form-text">Describe what you want the tweet to be about.</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="postAITweet()">
+                    <i class="bi bi-magic"></i> Generate & Post
+                </button>
+
+                <div id="aiResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Random from File -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-file-text"></i> Random Tweet from File
+            </div>
+            <div class="card-body">
+                <p>Post a random tweet from your tweets library (data/tweets.txt).</p>
+
+                <button class="btn btn-primary" onclick="postFileTweet()">
+                    <i class="bi bi-shuffle"></i> Post Random Tweet
+                </button>
+
+                <div id="fileResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Custom Text -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-pencil"></i> Custom Tweet
+            </div>
+            <div class="card-body">
+                <p>Write and post your own custom tweet.</p>
+
+                <div class="mb-3">
+                    <label for="customText" class="form-label">Tweet Text</label>
+                    <textarea class="form-control" id="customText" rows="4" maxlength="280" placeholder="What's happening?"></textarea>
+                    <div class="form-text">
+                        <span id="charCount">0</span> / 280 characters
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="postCustomTweet()">
+                    <i class="bi bi-send"></i> Post Tweet
+                </button>
+
+                <div id="customResult" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Sidebar -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-lightbulb"></i> Tips
+            </div>
+            <div class="card-body">
+                <h6><i class="bi bi-check2"></i> Best Practices:</h6>
+                <ul class="small">
+                    <li>Keep tweets concise and engaging</li>
+                    <li>Use relevant hashtags (but not too many)</li>
+                    <li>Include calls-to-action when appropriate</li>
+                    <li>Check your tweet before posting</li>
+                </ul>
+
+                <h6 class="mt-3"><i class="bi bi-info-circle"></i> Character Limit:</h6>
+                <p class="small mb-0">Twitter allows up to 280 characters per tweet.</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <i class="bi bi-clock-history"></i> Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/manage-tweets" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-list-ul"></i> Manage Tweet Library
+                    </a>
+                    <a href="/schedule" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-calendar-check"></i> Schedule Posts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Character counter for custom tweet
+    document.getElementById('customText').addEventListener('input', function() {
+        const count = this.value.length;
+        document.getElementById('charCount').textContent = count;
+
+        if (count > 280) {
+            document.getElementById('charCount').style.color = 'red';
+        } else {
+            document.getElementById('charCount').style.color = '';
+        }
+    });
+
+    async function postAITweet() {
+        const prompt = document.getElementById('aiPrompt').value;
+        const resultDiv = document.getElementById('aiResult');
+
+        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Generating and posting tweet...';
+
+        try {
+            const response = await fetch('/post-tweet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'ai',
+                    prompt: prompt
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong><i class="bi bi-check-circle"></i> Tweet Posted Successfully!</strong>
+                        <div class="tweet-box mt-2">
+                            ${data.tweet}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                        ${data.error}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    async function postFileTweet() {
+        const resultDiv = document.getElementById('fileResult');
+
+        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Posting tweet...';
+
+        try {
+            const response = await fetch('/post-tweet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'file'
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong><i class="bi bi-check-circle"></i> Tweet Posted Successfully!</strong>
+                        <div class="tweet-box mt-2">
+                            ${data.tweet}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                        ${data.error}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    async function postCustomTweet() {
+        const text = document.getElementById('customText').value;
+        const resultDiv = document.getElementById('customResult');
+
+        if (!text.trim()) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-warning">
+                    <strong><i class="bi bi-exclamation-triangle"></i> Warning!</strong><br>
+                    Please enter some text for your tweet.
+                </div>
+            `;
+            return;
+        }
+
+        if (text.length > 280) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-warning">
+                    <strong><i class="bi bi-exclamation-triangle"></i> Warning!</strong><br>
+                    Your tweet is too long. Please keep it under 280 characters.
+                </div>
+            `;
+            return;
+        }
+
+        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Posting tweet...';
+
+        try {
+            const response = await fetch('/post-tweet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'text',
+                    text: text
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong><i class="bi bi-check-circle"></i> Tweet Posted Successfully!</strong>
+                        <div class="tweet-box mt-2">
+                            ${data.tweet}
+                        </div>
+                    </div>
+                `;
+                document.getElementById('customText').value = '';
+                document.getElementById('charCount').textContent = '0';
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                        ${data.error}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <strong><i class="bi bi-x-circle"></i> Error!</strong><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+</script>
+{% endblock %}
